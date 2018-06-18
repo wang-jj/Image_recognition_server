@@ -20,7 +20,7 @@ public class Main_controller {
 
     @RequestMapping("/index")
     public String index() {
-        try{
+        /*try{
             Process pr = Runtime.getRuntime().exec("python /home/wang/a.py");
 
             BufferedReader in = new BufferedReader(new
@@ -33,7 +33,7 @@ public class Main_controller {
             pr.waitFor();
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
         return "test";
     }
 
@@ -50,7 +50,7 @@ public class Main_controller {
         JSONArray jsonObject=JSONArray.fromObject(commodityList);
         return jsonObject.toString();*/
         String result=null;
-        String path="/home/wang/test/";
+        String path="/home/ubuntu/project/tmp_image/";
         String time=String.valueOf(System.currentTimeMillis());
         String image_path=null;
         try{
@@ -76,7 +76,7 @@ public class Main_controller {
             InputStream inputStream=socket.getInputStream();
             BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
             result=bufferedReader.readLine();
-            System.out.println(result);
+            /*System.out.println(result);*/
             printWriter.close();
             bufferedReader.close();
             socket.close();
@@ -107,4 +107,23 @@ public class Main_controller {
         }*/
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping(value="/te",produces="application/json;charset=UTF-8")
+    public String test(@RequestParam(value="file",required=false)MultipartFile file){
+        String result=null;
+        String path="/home/ubuntu/project/tmp_image/";
+        String time=String.valueOf(System.currentTimeMillis());
+        String image_path=null;
+        try{
+            String contentType=file.getContentType();
+            String imageName=contentType.substring(contentType.indexOf("/")+1);
+            image_path=path+time+"test"+"."+imageName;
+            file.transferTo(new File(image_path));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "success";
+    }
+
 }
